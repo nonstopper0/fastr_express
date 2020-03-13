@@ -31,7 +31,7 @@ router.post('/register', async(req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    res.send({'data': 'succesfully logged out', 'status': 200})
+    res.status(200).send('succesfully logged out')
 })
 
 module.exports = router;
