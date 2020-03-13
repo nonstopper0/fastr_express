@@ -20,6 +20,16 @@ router.post('/login', async(req, res) => {
     }
 })
 
+router.post('/register', async(req, res) => {
+    try {
+        const passwordHash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+        await User.create({username: (req.body.username).toLowerCase(), password: passwordHash})
+        res.status(200).send('succesfully created user')
+    }catch(err) {
+        res.status(400).send(err)
+    }
+})
+
 router.get('/logout', (req, res) => {
     res.send({'data': 'succesfully logged out', 'status': 200})
 })
