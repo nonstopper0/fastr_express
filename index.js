@@ -7,17 +7,20 @@ require('dotenv').config();
 require('./db/db.js')
 
 
+//middleware
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 
+//controllers
 const userController = require('./controllers/users.js');
 app.use('/user', userController);
 const swipeController = require('./controllers/swipe.js');
 app.use('/swipe', swipeController);
 
+//starter
 app.listen(port, () => {
     console.log("Listening on port ", port)
 })
