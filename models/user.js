@@ -5,6 +5,11 @@ const userSchema = mongoose.Schema({
     password: {type: String, require: true},
     bio: {type: String, require: false},
     matches: {type: String, require: false},
+    location: {type: String, require: true},
+    likes_given: {type: Array},
+    likes_received: {type: Array},
+    dislikes_given: {type: Array},
+    matches: {type: Array}
 })
 
 const User = mongoose.model('User', userSchema)
