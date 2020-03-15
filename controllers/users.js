@@ -24,10 +24,24 @@ router.post('/login', async(req, res) => {
 // user register route
 router.post('/register', async(req, res) => {
     try {
-        await User.find({username: req.body.username}, )
-        const passwordHash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
-        await User.create({username: (req.body.username).toLowerCase(), password: passwordHash})
-        res.status(200).send('succesfully created user')
+        await User.find({username: req.body.username}, async(err, user) => {
+            if (err) {
+                res.status(400).send('there has been an error creating your account, please try again')
+            } else {
+                // if the username is already in the database then do not attempt to create the user
+                if (user.length > 0) {
+                    console.log(user)
+                    res.status(400).send('this username has already been taken')
+                }
+                // else
+                else {
+                    const passwordHash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+                    await User.create({username: (req.body.username).toLowerCase(), password: passwordHash})
+                    res.status(200).send('succesfully created user')
+                    console.log('nothing here')
+                }
+            }
+        })
     }catch(err) {
         res.status(400).send(err)
     }
@@ -42,8 +56,11 @@ router.get('/logout', (req, res) => {
 router.put('/update', (req, res) => {
     try {
         User.find({username: req.body.username}, (err, user) => {
-            console.log(err)
-            console.log(user)
+            if (err) {
+                res.status(400).send('there has been an error updating your account, please try again')
+            } else {
+
+            }
         })
         res.status(200).send('succesfully updated user')
     }catch(err) {
