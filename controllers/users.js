@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-let bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 
-//Login function
+// user login route
 router.post('/login', async(req, res) => {
     try {
         const foundUser = await User.findOne({username: req.body.username})
@@ -20,8 +21,10 @@ router.post('/login', async(req, res) => {
     }
 })
 
+// user register route
 router.post('/register', async(req, res) => {
     try {
+        await User.find({username: req.body.username}, )
         const passwordHash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
         await User.create({username: (req.body.username).toLowerCase(), password: passwordHash})
         res.status(200).send('succesfully created user')
@@ -30,8 +33,22 @@ router.post('/register', async(req, res) => {
     }
 })
 
+// user logout route
 router.get('/logout', (req, res) => {
-    res.status(200).send('succesfully logged out')
+    res.status(200).send('succesfully logged out')  
+})
+
+// user update account route
+router.put('/update', (req, res) => {
+    try {
+        User.find({username: req.body.username}, (err, user) => {
+            console.log(err)
+            console.log(user)
+        })
+        res.status(200).send('succesfully updated user')
+    }catch(err) {
+        res.status(400).send(err)
+    }
 })
 
 module.exports = router;
